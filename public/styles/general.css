@@ -1,0 +1,10 @@
+body {
+  overflow-x: hidden;
+}
+
+img.thumbnail {
+  height: 300px;
+  width: 200px;
+  object-fit: contain;
+  background-color: lightgray;
+}

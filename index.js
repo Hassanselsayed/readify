@@ -8,18 +8,9 @@ let books = [];
 app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
-  // res.render("index.ejs");
-  // await fetch("https://jsonplaceholder.typicode.com/posts")
-  //   .then(response => response.json())
-  //   .then(json => console.log(json));
-
-  // .get("https://jsonplaceholder.typicode.com/posts/10/comments")
   await axios
-    .get("https://gutendex.com/books?ids=11")
+    .get("https://gutendex.com/books?page=1")
     .then(response => {
-      // handle success
-      // books = [...books, response.data];
-      // console.log(response.data.results);
       res.render("index.ejs", {
         books: response.data.results,
       });
@@ -27,11 +18,13 @@ app.get("/", async (req, res) => {
     .catch(function (error) {
       // handle error
       console.log(error);
-    })
-    .finally(function () {
-      // always executed
-      // console.log("finished");
     });
+});
+
+app.get("/test", async (req, res) => {
+  res.render("index.ejs", {
+    book: true,
+  });
 });
 
 app.listen(port);
