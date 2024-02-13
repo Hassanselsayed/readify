@@ -20,10 +20,16 @@
   <body>
     <%- include('partials/header.ejs') %>
 
-    <% if (locals.book) { %>
-      <%- include('partials/book.ejs') %>
-    <% } else { %>
-      <%- include('partials/posts.ejs') %>
+    <% if (locals.books) { %>
+      <%- include('pages/home.ejs') %>
+    <% } %>
+
+    <% if (locals.bookUrl) { %>
+      <%- include('pages/book.ejs') %>
+    <% } %>
+
+    <% if (locals.error) { %>
+      <%- include('pages/error.ejs') %>
     <% } %>
 
     <script

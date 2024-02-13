@@ -8,3 +8,16 @@ img.thumbnail {
   object-fit: contain;
   background-color: lightgray;
 }
+
+@media screen and (min-width: 1300px) {
+  img.logo {
+    width: 11vw;
+    max-width: 200px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  img.logo {
+    width: 120px;
+  }
+}

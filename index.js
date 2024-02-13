@@ -7,9 +7,13 @@ let books = [];
 
 app.use(express.static("public"));
 
-app.get("/", async (req, res) => {
-  await axios
-    .get("https://gutendex.com/books?page=1")
+const getBooks = function (id) {
+  const url = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=1`;
+  return axios.get(url);
+};
+
+app.get("/", (req, res) => {
+  getBooks()
     .then(response => {
       res.render("index.ejs", {
         books: response.data.results,
@@ -17,14 +21,36 @@ app.get("/", async (req, res) => {
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
+      console.error(error);
     });
 });
 
-app.get("/test", async (req, res) => {
+app.get("/books/:bookId", (req, res) => {
+  getBooks(req.params.bookId)
+    .then(response => {
+      if (response.data.count !== 1) {
+        res.redirect(301, "/404");
+        return;
+      }
+      const bookUrl = response.data.results[0].formats["text/html"];
+      res.render("index.ejs", {
+        bookUrl: bookUrl,
+      });
+    })
+    .catch(function (error) {
+      // handle error
+      console.error(error);
+    });
+});
+
+app.get("*", function (req, res) {
   res.render("index.ejs", {
-    book: true,
+    error: true,
   });
 });
+
+// app.get("*", function (req, res) {
+//   res.redirect(301, "/404");
+// });
 
 app.listen(port);
