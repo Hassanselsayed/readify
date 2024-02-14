@@ -4,19 +4,21 @@ import axios from "axios";
 const app = express();
 const port = 3000;
 let books = [];
-
-app.use(express.static("public"));
-
-const getBooks = function (id) {
-  const url = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=1`;
+const getBooks = function (page, id) {
+  const url = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=${page}`;
   return axios.get(url);
 };
 
+app.use(express.static("public"));
+
 app.get("/", (req, res) => {
-  getBooks()
+  getBooks(1)
     .then(response => {
+      books = response.data.results;
+      // books = [...books, ...response.data.results];
       res.render("index.ejs", {
-        books: response.data.results,
+        books: books,
+        getBooks,
       });
     })
     .catch(function (error) {
@@ -26,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/books/:bookId", (req, res) => {
-  getBooks(req.params.bookId)
+  getBooks(1, req.params.bookId)
     .then(response => {
       if (response.data.count !== 1) {
         res.redirect(301, "/404");
