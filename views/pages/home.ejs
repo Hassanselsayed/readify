@@ -14,10 +14,10 @@
               <em class="mb-2 "><%= currentBooks[i].bookshelves[0] %></em>
 
               <!-- book title -->
-              <h2 class="mb-0"><%= currentBooks[i].title %></h2>
+              <h3 class="mb-0"><%= currentBooks[i].title %></h3>
 
               <!-- authors -->
-              <div class="text-body-secondary"><%= currentBooks[i].authors[0].name %></div>
+              <div class="text-body-secondary"><%= currentBooks[i].authors[0]?.name %></div>
               <div class="text-body-secondary"><%= currentBooks[i].authors[1]?.name %></div>
 
               <!-- link to book -->
@@ -50,6 +50,9 @@
     <% console.log(page) %>
     <% console.log(getBooks(page)) %>
   <% } %>
-  <button class="load-more btn btn-secondary" onclick="getBooks(page)">Load More</button>
+  
+
+  <!-- <button class="load-more btn btn-secondary" action="/book" method="POST">Load More</button> -->
+  <a href="khara" method="POST">Load More</a>
   <!-- paginate with routes -->
 </main>
