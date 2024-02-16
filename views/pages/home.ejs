@@ -1,28 +1,26 @@
 <main class="home-page container mt-5">
   <div class="row mb-2">
-    <% let page = 1 %>
     
-    <% const renderBooks = function(currentBooks) { %>
-      <% for (let i = 0; i < currentBooks.length; i++) { %>
+      <% for (let i = 0; i < books.length; i++) { %>
         
         <div class="col-md-6">
           <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static">
               <!-- book tags -->
-              <% const splitTag = currentBooks[i].subjects[0].split("-- ") %>
+              <% const splitTag = books[i].subjects[0].split("-- ") %>
               <em class=""><%= splitTag[splitTag.length - 1] ? splitTag[splitTag.length - 1] : splitTag[0] %></em>
-              <em class="mb-2 "><%= currentBooks[i].bookshelves[0] %></em>
+              <em class="mb-2 "><%= books[i].bookshelves[0] %></em>
 
               <!-- book title -->
-              <h3 class="mb-0"><%= currentBooks[i].title %></h3>
+              <h3 class="mb-0"><%= books[i].title %></h3>
 
               <!-- authors -->
-              <div class="text-body-secondary"><%= currentBooks[i].authors[0]?.name %></div>
-              <div class="text-body-secondary"><%= currentBooks[i].authors[1]?.name %></div>
+              <div class="text-body-secondary"><%= books[i].authors[0]?.name %></div>
+              <div class="text-body-secondary"><%= books[i].authors[1]?.name %></div>
 
               <!-- link to book -->
               <a
-                href="books/<%= currentBooks[i].id %>"
+                href="books/<%= books[i].id %>"
                 class="icon-link gap-1 icon-link-hover stretched-link mt-auto"
               >
                 Go to book
@@ -31,28 +29,13 @@
             </div>
             
             <div class="col-auto d-none d-lg-block">
-              <img class="thumbnail" src="<%= currentBooks[i].formats["image/jpeg"] %>" alt="book thumbnail" />
+              <img class="thumbnail" src="<%= books[i].formats["image/jpeg"] %>" alt="book thumbnail" />
             </div>
           </div>
         </div>
 
       <% } %>
-    <% } %>
-
-    <% if (locals.books) { %>
-      <%  renderBooks(books) %>
-    <% } %>
   </div>
-
   
-  <% const handlePagination = function() { %>
-    <% page++ %>
-    <% console.log(page) %>
-    <% console.log(getBooks(page)) %>
-  <% } %>
-  
-
-  <!-- <button class="load-more btn btn-secondary" action="/book" method="POST">Load More</button> -->
-  <a href="khara" method="POST">Load More</a>
-  <!-- paginate with routes -->
+  <!-- <a class="load-more btn btn-secondary" href="kharaa">Load More</a> -->
 </main>

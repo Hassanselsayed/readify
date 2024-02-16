@@ -3,32 +3,30 @@ import axios from "axios";
 
 const app = express();
 const port = 3000;
-let books = [];
-let page = 1;
 const getBooks = function (id) {
-  // console.log(page);
-  const url = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=${page}`;
-  return axios.get(url);
+  const uri = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=1`;
+  return axios.get(uri);
 };
 
 app.use(express.static("public"));
 
-app.get("/khara", (req, res) => {
-  page = page + 1;
+app.get("/", (req, res) => {
   getBooks()
     .then(response => {
       res.render("index.ejs", {
-        books: [...books, ...response.data.results],
+        books: response.data.results,
       });
     })
     .catch(function (error) {
-      // handle error
-      console.error(error);
+      res.redirect(301, "/404");
     });
 });
 
-// const test = document.querySelector(".load-more");
-// console.log(test);
+app.get("/license", (req, res) => {
+  res.render("index.ejs", {
+    license: true,
+  });
+});
 
 app.get("/books/:bookId", (req, res) => {
   getBooks(req.params.bookId)
@@ -43,22 +41,7 @@ app.get("/books/:bookId", (req, res) => {
       });
     })
     .catch(function (error) {
-      // handle error
-      console.error(error);
-    });
-});
-
-app.get("/", (req, res) => {
-  getBooks()
-    .then(response => {
-      books = response.data.results;
-      res.render("index.ejs", {
-        books: books,
-      });
-    })
-    .catch(function (error) {
-      // handle error
-      console.error(error);
+      res.redirect(301, "/404");
     });
 });
 
@@ -67,9 +50,5 @@ app.get("*", function (req, res) {
     error: true,
   });
 });
-
-// app.get("*", function (req, res) {
-//   res.redirect(301, "/404");
-// });
 
 app.listen(port);
