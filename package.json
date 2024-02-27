@@ -5,7 +5,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "netlify-lambda build express",
     "start": "nodemon server-local.js"
   },
   "keywords": [],
