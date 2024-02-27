@@ -1,25 +1,21 @@
 import express from "express";
 import axios from "axios";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000;
 const getBooks = function (id) {
-  const uri = id ? `https://gutendex.com/books?ids=${id}` : `https://gutendex.com/books?page=1`;
+  const uri = `https://gutendex.com/books?ids=${id}`;
   return axios.get(uri);
 };
 
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  getBooks()
-    .then(response => {
-      res.render("index.ejs", {
-        books: response.data.results,
-      });
-    })
-    .catch(function (error) {
-      res.redirect(301, "/404");
-    });
+  res.render("index.ejs", {
+    books: true,
+  });
 });
 
 app.get("/license", (req, res) => {
