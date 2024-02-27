@@ -9,6 +9,10 @@ img.thumbnail {
   background-color: lightgray;
 }
 
+.loader {
+  height: 70vh;
+}
+
 @media screen and (min-width: 1300px) {
   img.logo {
     width: 11vw;
