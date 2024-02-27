@@ -1,9 +1,11 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
+import serverless from "serverless-http";
 
 const app = express();
-const port = 3000;
+const router = express.Router();
+
 const getBooks = function (id) {
   const uri = `https://gutendex.com/books?ids=${id}`;
   return axios.get(uri);
@@ -12,19 +14,19 @@ const getBooks = function (id) {
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
   res.render("index.ejs", {
     books: true,
   });
 });
 
-app.get("/license", (req, res) => {
+router.get("/license", (req, res) => {
   res.render("index.ejs", {
     license: true,
   });
 });
 
-app.get("/books/:bookId", (req, res) => {
+router.get("/books/:bookId", (req, res) => {
   getBooks(req.params.bookId)
     .then(response => {
       if (response.data.count !== 1) {
@@ -41,10 +43,13 @@ app.get("/books/:bookId", (req, res) => {
     });
 });
 
-app.get("*", function (req, res) {
+router.get("*", function (req, res) {
   res.render("index.ejs", {
     error: true,
   });
 });
 
-app.listen(port);
+app.use("/.netlify/functions/index", router);
+
+export { app };
+export default serverless(app);
