@@ -1,41 +1,86 @@
-<main class="home-page container mt-5">
-  <div class="row mb-2">
+<main class="container my-5">
+  <div class="home-page d-none">
+    <div class="list row mb-2">
+      <!-- books will be injected programatically here -->
+    </div>
     
-      <% for (let i = 0; i < books.length; i++) { %>
-        
-        <div class="col-md-6">
-          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-              <!-- book tags -->
-              <% const splitTag = books[i].subjects[0].split("-- ") %>
-              <em class=""><%= splitTag[splitTag.length - 1] ? splitTag[splitTag.length - 1] : splitTag[0] %></em>
-              <em class="mb-2 "><%= books[i].bookshelves[0] %></em>
+    <form action="/" id="form" class="form" method="POST">
+      <button type="submit" class="form-submit btn btn-primary" value="2" name="page">Load More</button>
+    </form>
+  </div>
 
-              <!-- book title -->
-              <h3 class="mb-0"><%= books[i].title %></h3>
+  <div class="loader d-flex justify-content-center align-items-center">
+    <div class="spinner-border" role="status"></div>
+  </div>
+</main>
 
-              <!-- authors -->
-              <div class="text-body-secondary"><%= books[i].authors[0]?.name %></div>
-              <div class="text-body-secondary"><%= books[i].authors[1]?.name %></div>
+<script type="text/javascript">
+  let page = 1;
+  const list = document.querySelector('.list');
+  
+  const getData = function(page) {
+    fetch(`https://gutendex.com/books?page=${page}`)
+      .then((resJSON) => resJSON.json())
+      .then((res) => {
+        generateHtml(res.results);
 
-              <!-- link to book -->
-              <a
-                href="books/<%= books[i].id %>"
-                class="icon-link gap-1 icon-link-hover stretched-link mt-auto"
-              >
-                Go to book
-                <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
-              </a>
-            </div>
-            
-            <div class="col-auto d-none d-lg-block">
-              <img class="thumbnail" src="<%= books[i].formats["image/jpeg"] %>" alt="book thumbnail" />
-            </div>
+        if (page === 1) {
+          document.querySelector('.home-page').classList.remove('d-none');
+          document.querySelector('.loader').classList.add('d-none');
+        }
+      })
+      // .catch(function (error) {
+      //   document.querySelector('main').innerHTML = `<div>There was an error loading the books. Please try again later.</div>`
+      // });
+  }
+
+  const generateHtml = function (books) {
+    for (let i = 0; i < books.length; i++) {
+      const splitTag = books[i].subjects[0].split("-- ")
+
+      const newBook = document.createElement("div");
+      newBook.classList.add("col-md-6")
+
+      const html = `
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="col p-4 d-flex flex-column position-static">
+            <!-- book tags -->
+            <em class="">${splitTag[splitTag.length - 1] ? splitTag[splitTag.length - 1] : splitTag[0]}</em>
+
+            <!-- book title -->
+            <h3 class="mt-3 mb-0">${books[i].title.substring(0, 50)} ${books[i].title.length > 50 ? '...' : ''}</h3>
+
+            <!-- authors -->
+            <div class="text-body-secondary">${books[i].authors[0]?.name || ''}</div>
+            <div class="text-body-secondary">${books[i].authors[1]?.name || ''}</div>
+
+            <!-- link to book -->
+            <a
+              href="books/${books[i].id}"
+              class="icon-link gap-1 icon-link-hover stretched-link mt-auto"
+            >
+              Go to book
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+          
+          <div class="col-auto d-none d-lg-block">
+            <img class="thumbnail" src="${books[i].formats["image/jpeg"]}" alt="book thumbnail" />
           </div>
         </div>
+      `
+      newBook.innerHTML = html;
+      list.appendChild(newBook);
+    }
+  }
 
-      <% } %>
-  </div>
-  
-  <!-- <a class="load-more btn btn-secondary" href="kharaa">Load More</a> -->
-</main>
+  if (document) {
+    getData(page);
+
+    document.getElementById('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      page++;
+      getData(page);
+    });
+  }
+</script> 
