@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "nodemon server-local.js"
+    "start": "nodemon index-local.js"
   },
   "keywords": [],
   "author": "Hassan Elsayed",
