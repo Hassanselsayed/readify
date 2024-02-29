@@ -49,6 +49,6 @@ router.get("*", function (req, res) {
   });
 });
 
-app.use("/.netlify/functions/index", router);
+app.use("/", router);
 
 export const handler = serverless(app);
